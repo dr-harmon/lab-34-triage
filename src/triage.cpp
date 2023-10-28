@@ -18,10 +18,26 @@ int Patient::getID() const
     return id;
 }
 
+bool Patient::operator<(const Patient& other) const
+{
+    return getTag() < other.getTag();
+}
+
 Patient::Tag Patient::getTag() const
 {
-    // TODO
-    return GREEN;
+    if (respiratoryRate == 0) {
+        return BLACK;
+    }
+
+    if (respiratoryRate > 30 || radialPulse == 0 || capillaryRefill > 2 || !canFollowCommands) {
+        return RED;
+    }
+
+    if (canWalk) {
+        return GREEN;
+    }
+
+    return YELLOW;
 }
 
 ostream& operator<<(ostream& os, const Patient& patient)
@@ -44,17 +60,18 @@ ostream& operator<<(ostream& os, const Patient& patient)
     return os;
 }
 
-HospitalER::HospitalER(const vector<Patient>& patients)
+HospitalER::HospitalER(const vector<Patient>& patients) : q(patients.begin(), patients.end())
 {
 }
 
 Patient HospitalER::treatPatient()
 {
-    // TODO
+    Patient p = q.top();
+    q.pop();
+    return p;
 }
 
 bool HospitalER::hasPatients() const
 {
-    // TODO
-    return false;
+    return !q.empty();
 }

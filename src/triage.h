@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <queue>
 #include <vector>
 
 // Represents a patient in the ER with an ID number, vital signs, and a START tag.
@@ -24,6 +25,9 @@ public:
 
     // Prints patient information to the output stream for debugging purposes.
     friend std::ostream& operator<<(std::ostream& os, const Patient& patient);
+
+    // Returns whether the given patient should be triaged before the current one.
+    bool operator<(const Patient& other) const;
 
 private:
     // An ID number. Should be unique (no two patients with the same number).
@@ -60,4 +64,7 @@ public:
     // Returns true if some patients still need treatment; false if all patients
     // have been triaged and treated.
     bool hasPatients() const;
+
+private:
+    std::priority_queue<Patient> q;
 };
